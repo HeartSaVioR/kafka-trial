@@ -12,7 +12,11 @@ import scala.collection.mutable
 import org.json4s._
 import org.json4s.jackson.JsonMethods._
 
-// FIXME: type should be changed to Array[Byte], Array[Byte]
+// FIXME: type should be changed to Array[Byte], Array[Byte] when applying to Spark
+
+// TODO: should notify that the change of partitions will break exactly-once for specific batch
+// TODO: it depends on retention of tx topic, so if previous tx information is removed due to
+// retention, the batch can be rewritten
 
 case class TxInfo(queryId: String, partitionId: Long, totalPartitions: Long, epochId: Long) {
   import org.json4s.JsonDSL._
@@ -155,6 +159,4 @@ class IdempotentKafkaWriter(producerParams: Map[String, Object], consumerParams:
 
 object IdempotentKafkaWriter {
   val TX_TOPIC = "spark-kafka-tx"
-
-
 }
